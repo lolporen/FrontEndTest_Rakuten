@@ -22,7 +22,8 @@ class FormModal extends Component {
             action:''
         },
         modalType: '',
-        emailError: false
+        emailError: false,
+        userError: false
       };
     }
     render(){
@@ -35,6 +36,7 @@ class FormModal extends Component {
             <DialogContent>
                 <TextField
                 autoFocus
+                error={this.state.userError}
                 margin="dense"
                 id="Name"
                 label="Name"
@@ -48,10 +50,6 @@ class FormModal extends Component {
                 label="Phone"
                 value={this.state.row.phone}
                 onChange={this.handleChange('phone')}
-                type="number"
-                InputLabelProps={{
-                    shrink: true,
-                }}
                 fullWidth
                 />
                 <TextField
@@ -83,19 +81,22 @@ class FormModal extends Component {
     handleClose(){
         this.setState({ 
             open: false,
-            emailError: false
+            emailError: false,
+            userError: false
         });
     }
     handleSave(){
-        let isUserNmae = this.props.users.includes(this.state.row['name']);
-        if(this.state.row['email'] && !isUserNmae){
+        let isUserNmae = this.state.modalType==='modify' ? false : this.props.users.includes(this.state.row['name']);
+        let isEmailAddress = this.state.row['email'] ? false : validateEmail(this.state.row['email']);
+        if(isEmailAddress && !isUserNmae){
             this.state.modalType === 'modify' ? parentFormStore.modify(this.state.row) : false;
             this.state.modalType === 'add' ? parentFormStore.add(this.state.row) : false;
             this.handleClose();
             this.changeParent();
         }else{
             this.setState({
-                emailError: true
+                emailError: !isEmailAddress,
+                userError: isUserNmae
             })
         }
     }
@@ -114,5 +115,10 @@ class FormModal extends Component {
         });
     }
 }
+
+function validateEmail(email) {
+    var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(email);
+  }
 
 export default FormModal
