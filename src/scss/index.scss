@@ -1,0 +1,32 @@
+.action-button-list{
+  display: inline-flex;
+  width: 100%;
+}
+.action-button{
+  cursor: pointer;
+  width: 50px;
+  height: 30px;
+  margin-right: 10px;
+  border-radius: 4px;
+  line-height: 30px;
+  background-color: #0481f5;
+  color: white;
+  text-align: center;
+  &.Delete{
+    background-color: #f50418;
+  }
+  &.Add{
+    font-size: 28px;
+    width: 30px;
+    height: 30px;
+    margin: 10px auto;
+    text-align: center;
+    border-radius: 15px;
+    line-height: 28px;
+    background-color: #00cf91;
+  }
+}
+.dialog-content{
+  width: 90%;
+  margin: auto;
+}
