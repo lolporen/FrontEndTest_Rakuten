@@ -14,6 +14,7 @@ class FormModal extends Component {
       super(props, context);
       this.state = {
         open: false,
+        userName: '',
         row:{ 
             id:'',
             name:'',
@@ -86,9 +87,9 @@ class FormModal extends Component {
         });
     }
     handleSave(){
-        let isUserNmae = this.state.modalType==='modify' ? false : this.props.users.includes(this.state.row['name']);
-        let isEmailAddress = this.state.row['email'] ? false : validateEmail(this.state.row['email']);
-        if(isEmailAddress && !isUserNmae){
+        let isUserName = this.state.userName === this.state.row['name'] ? false : this.props.users.includes(this.state.row['name']);
+        let isEmailAddress = this.state.row['email'] ? true : validateEmail(this.state.row['email']);
+        if(isEmailAddress && !isUserName){
             this.state.modalType === 'modify' ? parentFormStore.modify(this.state.row) : false;
             this.state.modalType === 'add' ? parentFormStore.add(this.state.row) : false;
             this.handleClose();
@@ -96,7 +97,7 @@ class FormModal extends Component {
         }else{
             this.setState({
                 emailError: !isEmailAddress,
-                userError: isUserNmae
+                userError: isUserName
             })
         }
     }
@@ -111,7 +112,8 @@ class FormModal extends Component {
         this.setState({ 
             open: true,
             modalType: type,
-            row: row
+            row: row,
+            userName: row.name
         });
     }
 }
